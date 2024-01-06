@@ -1,4 +1,4 @@
-import { IRequestResponse, initRequestResponse } from "../store";
+import { VideoAudioRequestResponse } from "../cognitive/speech-tts-avatar";
 
 export enum AzureRoles {
   TTSAvatar = "Text-to-Speech Avatar",
@@ -101,8 +101,8 @@ export class AzureTTSAvatarInput {
   Language: string = EAzureLanguages.EnglishUnitedStates;
   VoiceNumber: number = 0;
 
-  VideoSrc: IRequestResponse = initRequestResponse;
-  AudioSrc: IRequestResponse = initRequestResponse;
+  VideoSrc: VideoAudioRequestResponse = new VideoAudioRequestResponse();
+  AudioSrc: VideoAudioRequestResponse = new VideoAudioRequestResponse();
 }
 
 export const AzureDefaultEnglishVoiceName = "en-US-JennyNeural";

@@ -3,6 +3,9 @@
 And ZBotService, ZBotPortal better has same version define in case roll back
 */
 
+## v6.20240107
+ - Fix TTS-Avatar status
+
 ## v6.20240106
  - Adapt Mobile
 
