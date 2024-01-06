@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, ChangeEvent } from "react";
 
-import { initRequestResponse, useAppConfig, useChatStore } from "../store";
+import { useAppConfig, useChatStore } from "../store";
 
 import styles from "../components/chat.module.scss";
 import styles_tm from "../toastmasters/toastmasters.module.scss";
@@ -27,20 +27,17 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { PlayCircleOutlineOutlined } from "@mui/icons-material";
 import {
   AzureLanguageToVoicesMap,
-  AzureRoles,
   AzureTTSAvatarInput,
   EAzureLanguages,
   EAzureSpeechPrice,
 } from "./AzureRoles";
 import {
   ISubmitAvatarSetting,
+  VideoAudioRequestResponse,
   VideoFetchStatus,
   onSynthesisAudio,
   onSynthesisAvatar,
 } from "../cognitive/speech-tts-avatar";
-import zBotServiceClient, {
-  LocalStorageKeys,
-} from "../zbotservice/ZBotServiceClient";
 import { useMobileScreen } from "../utils";
 
 export function Chat() {
@@ -232,7 +229,7 @@ export function ChatCore(props: { inputCopilot: AzureTTSAvatarInput }) {
     }
 
     chatStore.updateCurrentSession((session) => {
-      inputCopilot.VideoSrc = initRequestResponse;
+      VideoAudioRequestResponse.reset(inputCopilot.VideoSrc);
       inputCopilot.VideoSrc.submitting = true;
     });
 
@@ -264,45 +261,45 @@ export function ChatCore(props: { inputCopilot: AzureTTSAvatarInput }) {
       inputCopilot.Language,
     );
     const predictCost = Math.ceil(predictSeconds * EAzureSpeechPrice.TTSVoice);
-    if (config.avatarVideo.previewCost === true) {
-      const isConfirmed = await showConfirm(
-        <List>
-          <ListItem title={`TTS语音合成`}></ListItem>
-          <ListItem title="AI币消耗">
-            <p>
-              {" "}
-              {`TTS语音合成: ${
-                EAzureSpeechPrice.TTSAvatar * 60
-              } AI币/min, 当前预估: ${predictSeconds} s, 预计消耗 ${predictCost} AI币`}{" "}
-            </p>
-          </ListItem>
-          <ListItem
-            title={Locale.Settings.AvatarVideo.PreviewCost.Title}
-            subTitle={Locale.Settings.AvatarVideo.PreviewCost.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={config.avatarVideo.previewCost}
-              // TODO
-              // onChange={(e) =>
-              //   updateConfig(
-              //     (config) =>
-              //       (config.avatarVideo.previewCost = e.currentTarget.checked),
-              //   )
-              // }
-            ></input>
-          </ListItem>
-        </List>,
-      );
-      if (!isConfirmed) return;
-    }
+    // if (config.avatarVideo.previewCost === true) {
+    //   const isConfirmed = await showConfirm(
+    //     <List>
+    //       <ListItem title={`TTS语音合成`}></ListItem>
+    //       <ListItem title="AI币消耗">
+    //         <p>
+    //           {" "}
+    //           {`TTS语音合成: ${
+    //             EAzureSpeechPrice.TTSAvatar * 60
+    //           } AI币/min, 当前预估: ${predictSeconds} s, 预计消耗 ${predictCost} AI币`}{" "}
+    //         </p>
+    //       </ListItem>
+    //       <ListItem
+    //         title={Locale.Settings.AvatarVideo.PreviewCost.Title}
+    //         subTitle={Locale.Settings.AvatarVideo.PreviewCost.SubTitle}
+    //       >
+    //         <input
+    //           type="checkbox"
+    //           checked={config.avatarVideo.previewCost}
+    //           // TODO
+    //           // onChange={(e) =>
+    //           //   updateConfig(
+    //           //     (config) =>
+    //           //       (config.avatarVideo.previewCost = e.currentTarget.checked),
+    //           //   )
+    //           // }
+    //         ></input>
+    //       </ListItem>
+    //     </List>,
+    //   );
+    //   if (!isConfirmed) return;
+    // }
     const isEnoughCoins = await chatStore.isEnoughCoins(predictCost);
     if (!isEnoughCoins) {
       return;
     }
 
     chatStore.updateCurrentSession((session) => {
-      inputCopilot.AudioSrc = initRequestResponse;
+      VideoAudioRequestResponse.reset(inputCopilot.AudioSrc);
       inputCopilot.AudioSrc.submitting = true;
     });
 

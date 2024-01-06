@@ -1,21 +1,7 @@
-import { useEffect, useState } from "react";
 import JSZip from "jszip";
 import axios from "axios";
 import { getServerSideConfig } from "../config/server";
 
-import { List, ListItem } from "../components/ui-lib";
-
-import Locale from "../locales";
-
-import { useAppConfig } from "../store";
-
-import Switch from "@mui/material/Switch";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
-
-import { IRequestResponse } from "../store/chat";
-
-import styles_tm from "../toastmasters/toastmasters.module.scss";
 import zBotServiceClient, {
   LocalStorageKeys,
 } from "../zbotservice/ZBotServiceClient";
@@ -38,10 +24,29 @@ export interface ISubmitAvatarSetting {
   Voice: string;
 }
 
+export class VideoAudioRequestResponse {
+  status: string = "";
+  data: string = "";
+  duration: number = 0;
+  submitting: boolean = false;
+
+  caption?: string = "";
+  lastSegment?: number = -1;
+
+  public static reset = (item: VideoAudioRequestResponse): void => {
+    item.status = "";
+    item.data = "";
+    item.duration = 0;
+    item.submitting = false;
+    item.caption = "";
+    item.lastSegment = -1;
+  };
+}
+
 export const onSynthesisAvatar = async (
   inputText: string,
   setting: ISubmitAvatarSetting,
-): Promise<IRequestResponse> => {
+): Promise<VideoAudioRequestResponse> => {
   const header = {
     // Accept: "application/json",
     "Ocp-Apim-Subscription-Key": subscriptionKey,
@@ -74,6 +79,8 @@ export const onSynthesisAvatar = async (
     },
   };
 
+  const res = new VideoAudioRequestResponse();
+
   try {
     const response = await axios.post(url, payload, {
       headers: header,
@@ -81,7 +88,9 @@ export const onSynthesisAvatar = async (
 
     if (response.status >= 400) {
       console.error(`Failed to submit batch avatar synthesis job: ${response}`);
-      return { status: VideoFetchStatus.Failed, data: response.data };
+      res.status = VideoFetchStatus.Failed;
+      res.data = response.data;
+      return res;
     }
 
     const job_id = response.data.id;
@@ -108,17 +117,15 @@ export const onSynthesisAvatar = async (
           `onPreviewVideo: duration=${duration}, realCost=${realCost}`,
         );
 
-        return {
-          status: VideoFetchStatus.Succeeded,
-          data: response.data.outputs.result,
-          duration: duration,
-        };
+        res.status = VideoFetchStatus.Succeeded;
+        res.data = response.data.outputs.result;
+        res.duration = duration;
+        return res;
       }
       if (currentStatus === "Failed") {
-        return {
-          status: VideoFetchStatus.Failed,
-          data: response.data,
-        };
+        res.status = VideoFetchStatus.Failed;
+        res.data = response.data;
+        return res;
       } else {
         // console.log(
         //   `batch avatar synthesis job is still running, status [${currentStatus}]`,
@@ -128,17 +135,16 @@ export const onSynthesisAvatar = async (
     }
   } catch (error) {
     console.error(`Failed to submit batch avatar synthesis job: ${error}`);
-    return {
-      status: VideoFetchStatus.Failed,
-      data: error,
-    };
+    res.status = VideoFetchStatus.Failed;
+    res.data = error as string;
+    return res;
   }
 };
 
 export const onSynthesisAudio = async (
   inputText: string,
   setting: ISubmitAvatarSetting,
-): Promise<IRequestResponse> => {
+): Promise<VideoAudioRequestResponse> => {
   const header = {
     Accept: "application/json",
     "Ocp-Apim-Subscription-Key": subscriptionKey,
@@ -163,6 +169,8 @@ export const onSynthesisAudio = async (
     },
   };
 
+  const res = new VideoAudioRequestResponse();
+
   try {
     const response = await axios.post(url, payload, {
       headers: header,
@@ -170,7 +178,9 @@ export const onSynthesisAudio = async (
 
     if (response.status >= 400) {
       console.error(`Failed to submit batch avatar synthesis job: ${response}`);
-      return { status: VideoFetchStatus.Failed, data: response.data };
+      res.status = VideoFetchStatus.Failed;
+      res.data = response.data;
+      return res;
     }
 
     const job_id = response.data.id;
@@ -223,17 +233,15 @@ export const onSynthesisAudio = async (
           `onSynthesisAudio: duration=${duration}, realCost=${realCost}`,
         );
 
-        return {
-          status: VideoFetchStatus.Succeeded,
-          data: mp3Url,
-          duration: duration,
-        };
+        res.status = VideoFetchStatus.Succeeded;
+        res.data = mp3Url as string;
+        res.duration = duration;
+        return res;
       }
       if (currentStatus === "Failed") {
-        return {
-          status: VideoFetchStatus.Failed,
-          data: response.data,
-        };
+        res.status = VideoFetchStatus.Failed;
+        res.data = response.data;
+        return res;
       } else {
         // console.log(
         //   `batch avatar synthesis job is still running, status [${currentStatus}]`,
@@ -243,10 +251,9 @@ export const onSynthesisAudio = async (
     }
   } catch (error) {
     console.error(`Failed to submit batch avatar synthesis job: ${error}`);
-    return {
-      status: VideoFetchStatus.Failed,
-      data: error,
-    };
+    res.status = VideoFetchStatus.Failed;
+    res.data = error as string;
+    return res;
   }
 };
 
