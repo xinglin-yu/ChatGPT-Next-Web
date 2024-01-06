@@ -231,9 +231,7 @@ export const FreePersonalQuestionPageBody = (props: {
   const [evaluationRole, setEvaluationRole] = React.useState<string>(
     ImpromptuSpeechRoles.Scores,
   );
-  const [evaluating, setEvaluating] = useState(
-    Object.keys(questionItem.Evaluations).length > 0,
-  );
+  const [evaluating, setEvaluating] = useState(false);
 
   const chatStore = useChatStore();
   const [session, sessionIndex] = useChatStore((state) => [
@@ -407,7 +405,12 @@ export const FreePersonalQuestionPageBody = (props: {
     chatStore.resetSessionFromIndex(2);
   };
 
-  const onReGenerateEvaluation = async (role: string) => {
+  const onEvaluationRole = async (role: string) => {
+    if (questionItem.Speech === "") {
+      showToast("Speech is empty");
+      return;
+    }
+
     setEvaluating(true);
 
     chatStore.updateCurrentSession(
@@ -857,7 +860,7 @@ export const FreePersonalQuestionPageBody = (props: {
                         </IconButtonMui>
                         <IconButtonMui
                           title="Regenerage"
-                          onClick={(event) => onReGenerateEvaluation(role)}
+                          onClick={(event) => onEvaluationRole(role)}
                         >
                           <ReplayCircleFilledIcon />
                         </IconButtonMui>
@@ -868,7 +871,7 @@ export const FreePersonalQuestionPageBody = (props: {
                   ) : (
                     <Button
                       // onClick={(event) => onEvaluation(event)}
-                      onClick={onEvaluation}
+                      onClick={(event) => onEvaluationRole(role)}
                       variant="outlined"
                       sx={{
                         textTransform: "none", // 防止文本大写
@@ -1030,14 +1033,13 @@ export function FreePersonalReport(props: {
   };
 
   function EvaluationCard() {
+    // TODO: here will always return to the 1st card, should use as questionItem.tab
     const evaluationRoles = ImpromptuSpeechPrompts.GetTotalEvaluationRoles();
     const [evaluationRole, setEvaluationRole] = React.useState<string>(
       evaluationRoles[0],
     );
 
-    const [evaluating, setEvaluating] = useState(
-      Object.keys(impromptuSpeechInput.TotalEvaluations).length > 0,
-    );
+    const [evaluating, setEvaluating] = useState(false);
     const navigate = useNavigate();
 
     const onReEvaluation = async (role: string) => {
@@ -1187,7 +1189,7 @@ export function FreePersonalReport(props: {
                   <CircularProgress />
                 ) : (
                   <Button
-                    onClick={onEvaluation}
+                    onClick={() => onReEvaluation(role)}
                     variant="outlined"
                     sx={{
                       textTransform: "none", // 防止文本大写

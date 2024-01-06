@@ -100,7 +100,7 @@ export class ImpromptuSpeechInput {
   TotalEvaluations: Record<string, string> = {};
 
   Interaction: string = ESpeechModes.Free;
-  Mode: string = ESpeechModes.Personal;
+  Mode: string = ESpeechModes.Hosting;
 
   QuestionItems: IQuestionItem[] = [];
 }
