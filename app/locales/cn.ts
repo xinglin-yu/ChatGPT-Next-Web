@@ -215,21 +215,24 @@ const cn = {
         AccountBalance: {
           Title: "账户余额",
           BaseCoins: {
-            Title: "基础AI币余额",
-            SubTitle: "(不会清空)",
+            Title: "AI币",
+            // Title: "基础AI币余额",
+            // SubTitle: "(不会清空)",
           },
           LimitCoins: {
-            Title: "限时AI币余额",
-            SubTitle: "(限时1天, 0点清空)",
+            Title: "限时AI币",
+            // SubTitle: "(限时1天, 0点清空)",
+            SubTitle: "(0点清空)",
           },
           TotalDialogs: {
             Title: "总对话次数",
-            SubTitle: "(每条对话消耗1个AI币, 先限时币, 再基础币)",
+            // SubTitle: "(每条对话消耗1个AI币, 先限时币, 再基础币)",
           },
           TotalSignDays: {
             Title: "总签到天数",
             SubTitle: (baseCoins: number, limitCoins: number) =>
-              `每日签到领取${baseCoins}个基础AI币,${limitCoins}个限时AI币`,
+              `签到领${baseCoins}基础AI币,${limitCoins}限时AI币`,
+            // `每日签到领取${baseCoins}个基础AI币,${limitCoins}个限时AI币`,
           },
         },
         SignState: {
@@ -252,8 +255,14 @@ const cn = {
         },
         CoinDescription: {
           Title: "AI币说明",
-          Rule1: "- 新用户注册时, 赠送20个基础AI币",
-          Rule2: "- 邀请用户时, 邀请人和被邀请人均赠送5个基础AI币",
+          Rule: `
+          - 新用户注册 +50 个基础AI币,
+          - 邀请用户时, 双方各 +5 个基础AI币,
+          - AI文本对话：1个AI币/次
+          - AI语音播放（文本转语音）：5个AI币/分钟
+          - AI语音录入（语音转文本）：15个AI币/分钟
+          - AI数字人视频：300个AI币/分钟
+          `,
         },
       },
     },

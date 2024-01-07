@@ -2,6 +2,8 @@
 /*The version should be max(ZBotService, ZBotPortal),
 And ZBotService, ZBotPortal better has same version define in case roll back
 */
+## v6.20240107-pay
+ - Fast pay QRCode, update constants
 
 ## v6.20240107
  - Fix TTS-Avatar status
