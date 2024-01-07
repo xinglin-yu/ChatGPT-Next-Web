@@ -256,14 +256,14 @@ const en: LocaleType = {
         },
         CoinDescription: {
           Title: "AI Coins Description",
-          Rule1: "- New users are given 50 base AI coins when they sign up",
-          // Rule1: "- New users are given 20 base AI coins when they sign up",
-          Rule2:
-            "- When inviting users, both the inviter and the invitee are given 5 base AI coins",
-          Rule3: "- Chat: 1 AI coin/interaction",
-          Rule4: "- AI voice: 5 AI coins/min(Text to speech)",
-          Rule5: "- AI listening: 15 AI coins/min(Speech to text)",
-          Rule6: "- AI Avatar: 300 AI coins/min",
+          Rule: `
+          - Sign up: +50 base AI coins
+          - Inviting users: both +5 base AI coins
+          - AI Chat: 1 AI coin/interaction
+          - AI voice(Text to speech): 5 AI coins/min
+          - AI listening(Speech to text): 15 AI coins/min
+          - AI Avatar: 300 AI coins/min
+          `,
         },
       },
     },

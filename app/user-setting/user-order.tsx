@@ -212,12 +212,9 @@ function UserbalanceInfo(userEmail: string) {
         title={Locale.Settings.UserBalance.BalanceCenter.CoinDescription.Title}
       >
         <div className={styles_user["user-order-desc"]}>
-          <label>
-            {Locale.Settings.UserBalance.BalanceCenter.CoinDescription.Rule1}
-          </label>
-          <label>
-            {Locale.Settings.UserBalance.BalanceCenter.CoinDescription.Rule2}
-          </label>
+          <div style={{ whiteSpace: "pre-wrap" }}>
+            {Locale.Settings.UserBalance.BalanceCenter.CoinDescription.Rule}
+          </div>
         </div>
         <div></div>
       </ListItem>
