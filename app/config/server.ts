@@ -50,30 +50,11 @@ export const getServerSideConfig = () => {
     enableGPT4: !process.env.DISABLE_GPT4,
     hideBalanceQuery: !!process.env.HIDE_BALANCE_QUERY,
 
-    zBotServiceUrl: process.env.ZBotServiceUrl,
-    zCareersPayUrl: process.env.ZCareersPayUrl,
+    zBotServiceUrl: process.env.BackendServiceUrl,
     speechSubscriptionKey: process.env.SpeechSubscriptionKey,
-    speechServiceRegion: "eastus",
-    speechAvatarSubscriptionKey: "placeholder",
-    speechAvatarServiceRegion: "westus2",
+    speechServiceRegion: process.env.SpeechSubscriptionRegion,
+    speechAvatarSubscriptionKey: process.env.SpeechSubscriptionKey,
+    speechAvatarServiceRegion: process.env.SpeechSubscriptionRegion,
   };
-
-  /*
-  TODO: 
-  In web development, the .env.local file is not loaded
-    I have tried dotenv and fs, but failed
-  In production env
-    I have tried to set the env variable in the Azure App Service Configuration, but failed
-  
-  Developmer should replace these env variables here, but not submit to repo
-  The env variables can get from the Azure Key Vault
-  */
-  config.zBotServiceUrl = "placeholder";
-  config.zCareersPayUrl = "placeholder";
-  config.speechSubscriptionKey = "placeholder";
-
-  // production, development
-  console.log("Running env: ", process.env.NODE_ENV);
-
   return config;
 };
